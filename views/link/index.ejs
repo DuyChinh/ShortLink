@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com/">
+    <title>Rút gọn link miễn phí, nhanh nhất</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div class="d-flex justify-content-between mb-3">
+      <a href="/" class="btn btn-success"><i class="fa-solid fa-house"></i> Go home</a>
+      <a href="/auth/logout" class="btn btn-danger"><i class="fa-solid fa-right-from-bracket"></i> Đăng xuất</a>
+    </div>
+    <h1>Rút gọn liên kết</h1>
+    <p>Công cụ rút ngắn nhanh nhất, free</p>
+
+    <%- success.length ? `<div class="alert alert-success col-6">${success}</div>`: "" %>
+    <div class="row">
+      <div class="col-8 table-responsive">
+        <table class="table table-bordered table-striped table-responsive" style="font-size: 12px;">
+          <thead>
+            <th>STT</th>
+            <th>Liên kết rút gọn</th>
+            <th>Liên kết gốc</th>
+            <th>Mật khẩu</th>
+            <th style="width: 5%">Lượt truy cập</th>
+            <th style="width: 15%">Thời gian tạo</th>
+            <th>Hành động</th>
+          </thead>
+          <tbody>
+            <% links.forEach((link, index) => { %>
+            <tr>
+              <td><%= index + 1 %></td>
+              <td>
+                <% if (!link.secure) { %>
+                    <a href="<%= link.compact_link %>" target="_blank" onclick="redirectRoot('<%= link.root_link %>')"><%= link.compact_link %></a>
+                <% } else { %>
+                    <a href="/<%= link.code %>" target="_blank"><%= link.compact_link %></a>
+                <% } %>
+              </td>
+              <td>
+                <a href="<%= link.root_link %>" target="_blank"><%= link.root_link.split("/")[2] %></a>
+              </td>
+              <td>
+                <% if (link.password) { %>
+                <button onclick="showPassword('<%= link.password %>')" class="btn btn-outline-info">Xem</button>
+                <% } else { %>
+                <span>No password</span>
+                <% } %>
+              </td>
+              <td><%= link.view %></td>
+              <td style="width: 50px"><%= moment(link.created_at).fromNow() %></td>
+              <td class="d-flex align-items-center gap-1">
+                <a href="/link/edit/<%= link.code %>" class="btn btn-warning">
+                  <i class="fa-solid fa-pen-to-square"></i></a>
+                <button onclick="openNewWindow('<%= link.compact_link %>')" class="btn btn-success">
+                  <i class="fa-solid fa-share-from-square"></i>
+                </button>
+
+                <form action="/link/delete/<%=link.id %>" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xóa liên kết này?')">
+                    <button type="submit" class="btn btn-danger"><i class="fa-solid fa-trash"></i></button>
+                </form>
+              </td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-4">
+        <form action="" method="post" style="padding: 15px; border: 1px solid #ccc; border-radius: 5px">
+          <div class="mb-3">
+            <label for="form-label">Liên kết mục tiêu</label>
+            <input type="text" name="root_link" class="form-control" placeholder="Liên kết mục tiêu..." required>
+          </div>
+
+          <div class="mb-3">
+            <label for="">Liên kết rút gọn</label>
+            <input type="text" name="link" class="form-control" placeholder="Liên kết rút gọn..." readonly>
+          </div>
+
+          <div class="mb-3">
+            <label for="">Mật khẩu</label>
+            <input type="text" name="password" class="form-control" placeholder="Mật khẩu...">
+          </div>
+
+          <label for="myCheckbox" class="form-check-label ml-2">
+            <input type="checkbox" id="myCheckbox" name="safe_navigation" class="form-check-input">
+            Chuyển hướng an toàn(Tránh chặn bởi facebook)
+          </label>
+
+          <label for="Checkbox" class="form-check-label ml-2">
+            <input type="checkbox" id="Checkbox" name="check_id" class="form-check-input" onclick="showInput()">
+            Tùy chỉnh liên kết
+          </label>
+          <input type="text" id="customLinkInput" class="form-control mt-1" name="new_link" style="display: none;" value="<%= defaultLink %>/" onkeydown="return event.key !== 'Delete' && event.key !== 'Backspace';">
+          <%- err.length ? `<p class="mt-1" style="color: red">${err}</p> `: "" %>
+
+          <button class="btn btn-info text-white mt-3" style="width: 100%">Rút gọn</button>
+        </form>
+      </div>
+    </div>
+    <script>
+       
+        function showPassword(password) {
+            alert("Mật khẩu: " + password);
+        }
+
+        function redirectRoot(rootLink) {
+            window.open(rootLink); 
+        }
+
+        
+        function showInput() {
+            var checkbox = document.getElementById("Checkbox");
+            var input = document.getElementById("customLinkInput");
+
+            if (checkbox.checked) {
+            input.style.display = "block";
+            } else {
+            input.style.display = "none";
+            }
+        }
+
+        function openNewWindow(src) {
+          var windowName = "ShareWindow";
+          const url = "https://www.facebook.com/sharer/sharer.php?u=" + src;
+          var windowWidth = calculateWindowWidth();
+          var windowHeight = window.innerHeight;
+          var windowFeatures = "width=" + windowWidth + ",height=" + windowHeight + ",left=" + calculateLeftPosition(windowWidth) + ",top=" + calculateTopPosition(windowHeight);
+
+          window.open(url, windowName, windowFeatures);
+        }
+
+        function calculateWindowWidth() {
+          var screenWidth = window.screen.width;
+          return Math.round(screenWidth * 0.4);
+        }
+
+        function calculateLeftPosition(windowWidth) {
+          var screenWidth = window.screen.width;
+          return (screenWidth - windowWidth) / 2;
+        }
+
+        function calculateTopPosition(windowHeight) {
+          var screenHeight = window.screen.height;
+          return (screenHeight - windowHeight) / 2;
+        }
+    </script>
+
+</body>
+
+</html>

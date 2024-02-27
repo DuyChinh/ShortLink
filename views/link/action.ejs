@@ -1,0 +1,35 @@
+<title>Lựa chọn</title>
+<div class="col-4" style="margin: 40px auto; box-shadow: 0 0 5px #ccc; padding: 50px; border-radius: 5px">
+    <a href="<%=link.root_link %>" target="_blank" class="btn btn-outline-primary" style="width: 100%">Nhấn vào đây để tiếp tục</a>
+    <button onclick="openNewWindow('<%= link.compact_link %>')" class="btn btn-outline-info mt-3" style="width: 100%">Chia sẻ lên facebook</button>
+    <a href="/<%= link.code %>/qrcode" target="_blank" class="btn btn-outline-success mt-3" style="width: 100%">Gửi tới điện thoại(QR code)</a>
+    <a href="/link/compactLink" target="_blank" class="btn btn-outline-danger mt-3" style="width: 100%">Rút gọn link mới</a>
+</div>
+<script>
+    function openNewWindow(src) {
+        var windowName = "ShareWindow";
+        const url = "https://www.facebook.com/sharer/sharer.php?u=" + src;
+        var windowWidth = calculateWindowWidth();
+        var windowHeight = window.innerHeight;
+        var windowFeatures = "width=" + windowWidth + ",height=" + windowHeight + ",left=" + calculateLeftPosition(windowWidth) + ",top=" + calculateTopPosition(windowHeight);
+
+        window.open(url, windowName, windowFeatures);
+    }
+
+    
+
+    function calculateWindowWidth() {
+        var screenWidth = window.screen.width;
+        return Math.round(screenWidth * 0.4);
+    }
+
+    function calculateLeftPosition(windowWidth) {
+    var screenWidth = window.screen.width;
+    return (screenWidth - windowWidth) / 2;
+    }
+
+    function calculateTopPosition(windowHeight) {
+    var screenHeight = window.screen.height;
+    return (screenHeight - windowHeight) / 2;
+    }
+</script>

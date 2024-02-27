@@ -1,0 +1,65 @@
+<h1>Danh sách người dùng</h1>
+<!-- <a href="/users/add" class="btn btn-success mb-3">Add user</a> -->
+<!-- <form action="" class="mb-3">
+  <div class="row">
+    <div class="col-3">
+      <select name="status" class="form-select">
+        <option value="all">Tất cả</option>
+        <option value="active">Kích hoạt</option>
+        <option value="inactive">Chưa kích hoạt</option>
+      </select>
+    </div>
+    <div class="col-7">
+      <input type="search" class="form-control" name="keyword" placeholder="Từ khóa..." />
+    </div>
+    <div class="col-2 d-grid">
+      <button class="btn btn-success">Tìm kiếm</button>
+    </div>
+  </div>
+</form> -->
+
+<ul>
+  <li><a href="/">Trang chủ</a></li>
+  <li><a href="/users">Quản lí người dùng</a></li>
+  <li><a href="/role">Quản lí roles</a></li>
+
+</ul>
+
+<%- msg.length ? `<div class="alert alert-success">${msg}</div>` : "" %>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th width="5%">STT</th>
+      <th>Tên</th>
+      <th>Email</th>
+      <th>Trạng thái</th>
+      <th>Thời gian</th>
+      <th>Phân quyền</th>
+      <th>Sửa</th>
+      <th>Xóa</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% users.forEach((user, index) => { %>
+      <tr>
+        <td><%= index+1  %></td>
+        <td><%= user.name  %></td>
+        <td><%= user.email  %></td>
+        <td><%= user.status ? 'Kích hoạt' : 'Chưa kích hoạt' %></td>
+        <td><%=moment(user.created_at).format('DD/MM/YYYY HH:mm:ss')%></td>
+        <td>
+          <a href="/users/permission/<%= user.id %>" class="btn btn-success">Phân quyền</a>
+        </td>
+        <td><a href="/users/edit/<%=user.id%>" class="btn btn-warning">Sửa</a></td>
+        <td>
+          <form action="/users/delete/<%=user.id%>" method="post" onsubmit="confirm('Bạn có chắc chắn muốn xóa không?')">
+            <button type="submit" class="btn btn-danger">Xóa</button>
+          </form>
+        </td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
+
+
+

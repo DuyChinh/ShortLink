@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com/">
+  <title>Trang chủ</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <h1>Chào mừng bạn đã quay trở lại.</h1>
+    <ul class="d-flex gap-2 list-unstyled align-items-center">
+      <li>
+        Chào bạn:
+        <% if (req.user.urlAvatar) { %>
+        <img style="width: 30px; border-radius: 50%; margin: 0 5px;" src="<%= req.user.urlAvatar %>" alt="avatar" />
+        <% } %>
+        <%= req.user.name %>
+      </li>
+      <li><a href="/auth/logout" class="btn btn-danger">Đăng xuất</a></li>
+    </ul>
+    <a href="/link/compactLink" class="btn btn-success">Rút gọn liên kết <i class="fa-solid fa-circle-right"></i></a>
+</body>
+</html>
