@@ -6,9 +6,10 @@
     "dev": "nodemon ./bin/www",
     "start": "nodemon ./bin/www",
     "postinstall": "npx sequelize-cli db:migrate",
-    "build": "npm run postinstall && npm run vercel-build"
+    "build": "npm run postinstall"
   },
   "dependencies": {
+    "nodemon": "3.1.0",
     "@faker-js/faker": "^8.3.1",
     "bcrypt": "^5.1.1",
     "bitly": "^7.1.2",
@@ -37,7 +38,6 @@
     "serve-favicon": "^2.5.0",
     "session": "^0.1.0",
     "shortid": "^2.2.16",
-    "vercel": "^33.3.0"
   },
   "devDependencies": {
     "sequelize-cli": "^6.6.2"
